@@ -106,3 +106,14 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 // 		fmt.Println(n)
 // 	}
 // }
+
+func test(c *int) {
+	c +=1
+	return c 
+}
+
+
+func main(){
+	r := 2
+	test(&r)
+}
