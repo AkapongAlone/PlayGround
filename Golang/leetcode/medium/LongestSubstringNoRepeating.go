@@ -3,15 +3,13 @@ package main
 func main() {
 	
 }
-
+// pass All Test Case 90ms(Beats 23.85%) runtime use 6.5 MB (Beats 22.63%)
 func lengthOfLongestSubstring(s string) int {
     if s == "" {return 0}
     var ans []byte
     var maxLen int = 1
     var index,start int
-    lenght := len(s)
-    for lenght!= 0 {
-        if index >= len(s) {break}
+    for index != len(s) {
         character := s[index]
         if !isInArr(ans,character) {
             ans = append(ans,character)
@@ -22,7 +20,7 @@ func lengthOfLongestSubstring(s string) int {
         ans = nil
         s = s[start+1:]
         index = 0
-        lenght --      
+            
 }
     if len(ans) > maxLen {maxLen = len(ans)}
     return maxLen
