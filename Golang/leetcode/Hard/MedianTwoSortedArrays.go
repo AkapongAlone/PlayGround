@@ -1,6 +1,7 @@
 package main
 
-import("fmt")
+import("fmt"
+)
 
 func main() {
 	nums1 := []int{1,2}
