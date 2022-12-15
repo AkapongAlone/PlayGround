@@ -79,3 +79,16 @@ func isOdd(arr []int) bool {
 	}
 	return true
 }
+
+
+
+// To improve the performance of this code, there are a few things you can try.
+
+// The first thing to try would be to optimize the Sort function. Right now, the function uses two nested loops, which means it has a time complexity of O(n^2) in the worst case. This is not very efficient, especially for large inputs.
+// One way to improve the performance of this function would be to use a faster sorting algorithm, such as quicksort or mergesort, which have time complexities of O(n log n) in the average case. These algorithms are much faster than the simple sorting algorithm used in this code, and can handle larger inputs more efficiently.
+
+// Another way to improve the performance of this code would be to use a binary search to find the median of the sorted array, rather than looping through the entire array to find it. This would have a time complexity of O(log n), which is much faster than the O(n) time complexity of the current code.
+
+// Finally, you can also try to optimize the Swap and indexOf functions. These functions are currently not very efficient, as they use multiple loops and calls to len() to find the index of an element in the array. This can be improved by using a map or a hash table to store the indices of each element in the array, which would allow you to look up the index of an element in constant time.
+
+// Overall, there are many ways to improve the performance of this code. By using a faster sorting algorithm, using a binary search to find the median, and optimizing the Swap and indexOf functions, you should be able to make this code run much faster.

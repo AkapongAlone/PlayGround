@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+{{range .}}
+<h1>{{.Fall.Term}}</h1>
+{{range .Fall.Courses}}
+<p>{{.}}</p>
+{{end}}
+
+{{end}}
+
+</body>
+</html>
