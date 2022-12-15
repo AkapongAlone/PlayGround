@@ -1,0 +1,2 @@
+
+range("A1:M45").formula = range("A1:M45").Value 

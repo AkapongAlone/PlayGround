@@ -1,0 +1,362 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+<!----------------------------------------------------- ตอนกดเข้าหน้าAdd ครั้งแรก ------------------------------>
+
+
+
+<div class=" text-center" style="padding:15px;">
+    {% if messages %}
+    <div class="alert alert-danger" role='alert'>{% for message in messages %}
+       <b>{{message}}</b>{%endfor%}</div>{%endif%}
+    <h1 class="f"><b> Settings Data </b></h1> 
+  </div>
+  <form id="form" name="form" action="get_model" method="POST" enctype="multipart/form-data"  onsubmit="return minmax()"> 
+    {% csrf_token %}
+<div class="container"> 
+   
+    <div class="col mb-3" id="parent"> <h3><b>Pattern การเรียงข้อมูล : </b> </h3>  
+         <select style="width: 100%;"   name="pattern" id="pattern"  required >
+        <optgroup >
+            <option  selected disabled value=""  >Select Pattern </option>
+        {% for i in pattern %} 
+        {% if sel_pattern != None %}
+        {{sel_pattern}}{{i.name}}
+        {% if sel_pattern == i.name  %}
+            <option  value ='{{i.name}}' selected  >{{sel_pattern}} </option> 
+        {%else%}
+            <option  value ='{{i.name}}'  >{{i.name}} </option> 
+            {%endif%}
+
+        {%else%}
+        <option  value ='{{i.name}}'  >{{i.name}} </option> 
+        {%endif%}
+        {%endfor%} 
+      </optgroup>
+      </select>  </div>
+    <div class="row align-items-center">
+    
+        <div class="col"> <h3><b>Partname : </b> </h3>  <input type="text" class="form-control" name="partname" required='' value="{{partname}}" >  </div>
+    <div class="col">  <h3><b>Model : </b> </h3>  <input type="text" class="form-control" name="model" required='' value="{{model}}" >   </div> 
+    <div class="col"> <h3><b>Machine Line : </b> </h3> <input type="text" class="form-control" name="machname" required='' value="{{machname}}" >  </div>
+    </div> <br>
+    <div class="row align-items-center"> 
+        <div class="col">   <h3><b>Machine NO. : </b> </h3>  <input type="text" class="form-control" name="machno" required='' value="{{machno}}" >   </div>  
+        <div class="col">    <h3><b>Machine Process : </b> </h3>  <input type="text" class="form-control" name="machpro" required='' value="{{machpro}}" >    </div>
+        <div class="col">    <h3><b>Process Name : </b> </h3>  <input type="text" class="form-control" name="process" required='' value="{{process}}" >
+             <!-- <input id='addtool' name="addtool" type="text" class="form-control mt-3"  placeholder="กรอกชื่อกรณีไม่มีในDropdown"  >   -->
+             </div> </div>
+     <br>
+    <div class="row align-items-center"> 
+    <div class="col"> <h3><b>Toolname : </b> </h3> 
+            
+            <select id="select1" name="tool"  class="custom-select-md custom-select ">
+        <optgroup >
+            <option selected disabled='true'>Other</option>
+         
+        {% for i in tool %}  
+         
+        {% if i.toolname == toolsel %}   
+       
+        <option selected value='{{i.ttid}}{{i.toolname}}' >{{i.toolname}} </option> 
+
+        {%else%}  
+        <option  value='{{i.ttid}}{{i.toolname}}'>{{i.toolname}} </option>  
+        {%endif%}   
+          
+        {%endfor%} 
+    </optgroup>
+            </select>    <h3 class="mt-3"><b>Tooltype: </b> </h3>  <select class="custom-select-sm custom-select" name="tooltype"  id="select2">
+        <option selected disabled='true'></option>
+        {% for k in type %}
+        
+        <option value="{{k.ttid}}">{{k.type}}</option> {%endfor%} 
+        </select> </div> 
+        
+        <div class="col">   <h3 class="mt-3" ><b>Image File : </b></h3>    
+             <input type="file"name="img_file" class="form-control" accept="image/*"  id="img_file" onchange="return fileValidation()" >
+            <input type="text"  class="form-control" id="img_text" value="{{img}}" disabled>
+            <input type="hidden" name="img"class="form-control" id="img_test"  value="{{img}}" >
+            </div> 
+        <div class="col">         <h3 > <b> Template File : </b></h3>  
+                <input type="file" name="choose_file" class="form-control mt-3" accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"id="excel_file"  onchange="add_sheet(this.value)" >
+                <input type="text" class="form-control" id="excel_text"  value="{{excel}}" disabled='true'>
+                <input type="hidden" name="exceltest"class="form-control" id="excel_test"  value="{{excel}}" >
+                <div class="input-group mt-1">
+                    <label class="input-group-text" for="inputGroupFile01">Sheet</label>
+                    <select class="input custom-select-lg custom-select" name="sheet" id="sel"onchange="Sheet(this.value)" >
+                        {% for i in sheets %}
+                        {% if i == sheet %}
+                        <option selected value="{{i}}">{{i}}</option>
+                        {%else%}
+                        <option value="{{i}}">{{i}}</option>
+                        {%endif%}
+                        {%endfor%}
+
+                    </select> 
+                   
+                    </div>
+                    <input type="text" class="form-control" id="sheet_text"  value="{{sheet}}" disabled='true'>
+                    <input type="hidden" name="sheettest"class="form-control" id="sheet_test"  value="{{sheet}}" >
+                    <input type="hidden" name="sheets" value='{{sheets}}'>
+              
+            </div>  
+        
+  </div> 
+<br>
+
+ <h3><b>Number of measurement :<input type="number" id="round" class="form-control" name="round" min="1" required='' > </b> </h3> 
+  
+
+ <div class="row align-items-center">  
+<div id="show" name='show'> </div>
+</div>  
+<div id="imagePreview"></div>
+<div id="excelPreview"></div>
+<input type="submit"  class="btn btn-primary waves-effect waves-light"  class="custom-select-md custom-select "/> </div> </form>
+
+
+
+    <script>
+
+
+        function clicked(e)
+        {
+            if(!confirm('กรุณาตรวจสอบความถูกต้อง')) {
+                e.preventDefault();
+            }
+        }
+        </script>
+
+<script>
+    $(document).ready(function()
+    {
+      var $select1=$('#select1'),
+          $select2=$('#select2'),
+          $options=$select2.find('option');
+          
+          $select1.on('change',function()
+          
+          {
+              
+            $select2.html($options.filter('[value="'+this.value.substr(0,1)+'"]'));
+          }).trigger('change');
+    });
+</script>
+<script>
+  $(document).ready(function()
+  {
+    $("#select1").select2({});
+    $("#select2").select2({});
+  });
+</script>
+
+<script>
+    function minmax(){
+        if (document.getElementById('pattern').value==''){
+            alert('กรุณาเลือก Pattern');
+            return false;
+        }
+        if(document.getElementById('select1').value==''){
+            alert('กรุณาเลือก เครื่องมือวัด');
+            return false;
+        }
+        var num=document.getElementById('round').value;
+        for (i =0;i<num;i++)     
+  {   let minid = 'min'+String(i);
+        let maxid = 'max'+String(i);
+      let min =document.getElementById(minid).value;
+      let max=document.getElementById(maxid).value;
+      if (Number(min) > Number(max)) {
+        alert('กรอกค่า min max ไม่ถูกต้อง');
+        console.log(min);
+        console.log(max);
+            return false;
+
+      }
+
+  }
+    }
+</script>
+
+
+ <!--check file type -->
+
+<script>
+    function fileValidation() {
+        var fileInput = 
+            document.getElementById('img_file');
+          
+        var filePath = fileInput.value;
+        document.getElementById('img_text').value=filePath.substr(filePath.lastIndexOf('\\') + 1);
+        document.getElementById('img_test').value=filePath.substr(filePath.lastIndexOf('\\') + 1);
+        // Allowing file type
+        var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+     
+    }
+   
+</script>
+<script>
+ function Sheet(sheet){
+        console.log(sheet)
+        document.getElementById('sheet_text').value=sheet
+        document.getElementById('sheet_test').value=sheet
+    }
+</script>
+
+<script>
+    function excelValidation() {
+        var fileInput = 
+            document.getElementById("excel_file");
+          
+        var filePath = fileInput.value;
+        document.getElementById('excel_text').value=filePath.substr(filePath.lastIndexOf('\\') + 1);
+        document.getElementById('excel_test').value=filePath.substr(filePath.lastIndexOf('\\') + 1);
+        // Allowing file type
+        var allowedExtensions = 
+        /(\.xls|\.xlsx)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+        
+    }
+</script>
+ <!-- code onchange +disable -->
+<script>
+const form = document.getElementById('form');
+const select = document.getElementById('round');
+
+const handleSelectChange = function(e) {
+    document.getElementById("show").innerHTML = ""
+  console.log(e.target.value);
+  var x =e.target.value;
+  console.log(x);
+  var show = document.getElementById("show");
+  for (i =0;i<x;i++)
+  {
+    var para = document.createElement("P");
+    para.setAttribute("class", "h3");
+    para.innerText = "Mesurement Point"+String(i+1);
+    show.appendChild(para);
+    var row = document.createElement("row");
+    row.setAttribute("class", "h4");
+    row.innerText = "Name";
+    show.appendChild(row);
+    show.appendChild(document.createElement("br"));
+    var newrow = document.createElement("input");
+    newrow.setAttribute("type", "text");
+    newrow.setAttribute("class",'form-control mb-3');
+    newrow.setAttribute("name",'point');
+    newrow.setAttribute("required", "");
+    show.appendChild(newrow);
+    show.appendChild(document.createElement("br"));
+    
+    console.log(document.getElementById("select2").value==2)
+    if (document.getElementById("select2").value==2){
+    var row_min = document.createElement("P");
+    row_min.setAttribute("class", "h4");
+    row_min.innerText = "Lower Limit";
+    show.appendChild(row_min);
+ 
+    var min = document.createElement("input");
+    min.setAttribute("type", "number");
+    min.setAttribute("step", "0.01");
+    min.setAttribute("class",'form-control mb-3 w-25 p-3');
+    min.setAttribute("name",'min');
+    min.setAttribute("id",'min'+String(i));
+    min.setAttribute("required", "");
+    show.appendChild(min);
+    var row_max = document.createElement("P");
+    row_max.setAttribute("class", "h4");
+    row_max.innerText = "Upper Limit";
+    show.appendChild(row_max);
+   
+    var max = document.createElement("input");
+    max.setAttribute("type", "number");
+    max.setAttribute("step", "0.01");
+    max.setAttribute("class",'form-control mb-3 w-25 p-3');
+    max.setAttribute("name",'max');
+    max.setAttribute("id",'max'+String(i));
+    max.setAttribute("required", "");
+    show.appendChild(max);}
+  } 
+}
+
+select.addEventListener('change', handleSelectChange); 
+
+
+</script>
+
+<script>
+    function add_sheet(file){
+        var fileInput = 
+            document.getElementById("excel_file");
+          
+        var filePath = fileInput.value;
+        document.getElementById('excel_text').value=filePath.substr(filePath.lastIndexOf('\\') + 1);
+        document.getElementById('excel_test').value=filePath.substr(filePath.lastIndexOf('\\') + 1);
+        // Allowing file type
+        var allowedExtensions = 
+        /(\.xls|\.xlsx)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+    
+    var d = new FormData();
+
+    var excelfile = document.getElementById('excel_file').files
+    // var excelfile = document.querySelector('#excel_file');
+   
+    d.append("file",excelfile[0]);
+    
+    axios({
+        url:'get_model',
+method:'post',
+data:d,
+headers:{'X-Requested-With':'XMLHttpRequest','Content-Type': 'multipart/form-data'},
+xsrfCookieName:'csrftoken',
+xsrfHeaderName:'X-CSRFToken'
+
+})
+.then(response => {
+    var select = document.getElementById("sel");
+    var length = select.options.length;
+    for (i = length-1; i >= 0; i--) {
+    select.options[i] = null;
+    }
+    var sheet = response.data.sheet
+    console.log(sheet)
+    var select = document.getElementById("sel");
+    for(s in sheet ) {
+        console.log(s)
+        var option = document.createElement('option');
+        option.text = option.value = sheet[s];
+        select.add(option);
+   
+    };
+
+})}
+
+</script>
+<script>
+      
+    $('#pattern').select2({
+      dropdownParent: $('#parent'),
+      theme: " custom-select-lg custom-select"
+  });
+</script>
+
+{%endblock%}

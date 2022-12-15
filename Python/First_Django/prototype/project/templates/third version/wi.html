@@ -1,0 +1,139 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+
+<div class="container">
+
+  
+    <h1 class="text-center f " > Select Model and Set WI </h1> 
+{% if messages %}
+{% for message in messages %}
+
+
+  {% if  message|stringformat:"s"  == "Successful" %}
+  <div class="alert alert-success" role='alert'><b>{{message}}</b>
+   </div>
+   {% else %}
+   <div class="alert alert-danger" role='alert'><b>{{message}}</b></div>{%endif%}
+   {%endfor%}{%endif%}
+<form id="form" action="wi" method="POST" enctype="multipart/form-data"> 
+  {% csrf_token %}
+<label for="model" class="form-label"> <h4> Select Model</h4></label>
+<input class="form-control" list="modellist" id="modell" name=" model " onchange="Mo()" value="{{ model_sel }}" autocomplete="off" >
+<datalist id="modellist">
+  <optgroup>
+  {% for m in model %}
+  <option value="{{m}}">{{m}}</option>
+  {% endfor %}
+  </optgroup>
+</datalist>
+ </form>
+
+ {% if tool != None %}
+ <div>
+ <table class="table table-lg table-dark table-striped mt-3">
+  <thead>
+      <tr>
+          <th>ลำดับที่</th>
+          <th>เครื่องมือ</th>
+          
+      </tr>
+  </thead>
+  <tbody>
+    <form id="form" action="insert_wi" method="POST" enctype="multipart/form-data"> 
+      {% csrf_token %}
+{% for t in tool %}
+    <tr>
+      <td> {{ forloop.counter }} </td>
+      
+      <td> 
+       
+        <!-- <input class="form-control" list="toollist"  name="tool"  value="{{t}}"  >
+        <datalist id="toollist">
+          {% for l in tool %}
+            <option value  ="{{l}}">
+      {% endfor %}
+           
+        
+        </datalist>  -->
+        <select class="input form-control-lg" name="tool"   id="{{ forloop.counter }}" style="width: 500px;" >
+          <optgroup >
+          <option  value selected disabled>Select </option> 
+          {% for i in tool %} 
+          {% if i == t %}
+          <option  value ='{{i}}' selected ='{{i}}'>{{i}} </option>  
+          {%else%} 
+          
+          <option  value ='{{i}}'>{{i}} </option>  
+          {%endif%}  
+          {%endfor%} 
+        </optgroup>
+        </select>
+
+        <input type="hidden" id="tool_list" name="tool">
+      </td>
+       
+    </tr>
+    <!-- <input type="hidden" name="wi" value="{{ forloop.counter }}"> -->
+{% endfor %}
+ <tr> <td colspan="2">
+   <input type="hidden" name="model" value="{{ model_sel }}">
+ <input type="submit" class="btn btn-primary f16 " style="float:right;" ></td></tr></form>
+    
+  </tbody></div>
+ 
+  {% endif %}</div>
+<script>
+          const tool_list = [];
+          // $('#model').select2();
+          // console.log(toollist);
+          var selects='{{tool}}'
+          var i ;
+          for (i = 0; i < selects.length; i++) {
+            var id = '#'+i.toString();
+            id=id.toString();
+            $(id).select2(); 
+            
+          }
+          console.log(tool_list);
+          document.getElementById('tool_list').value =tool_list;
+</script>
+<script>
+    function Mo() {
+      console.log(document.getElementById('modell').value);
+      document.getElementById('form').submit();
+
+    }
+    </script>
+
+<!-- code เลื่อนกลับมาที่เดิมก่อนรีเฟรชอัตโนมัติ -->
+<script>
+document.addEventListener("DOMContentLoaded", function(event) { 
+var scrollpos = localStorage.getItem('scrollpos');
+if (scrollpos) window.scrollTo(0, scrollpos);
+});
+
+window.onbeforeunload = function(e) {
+localStorage.setItem('scrollpos', window.scrollY);
+};
+</script>        
+
+<!-- <script>
+  $(document).ready(function() {  
+  var data = JSON.parse('{{bigdic|safe}}');
+  
+  
+  // สร้าง list of keys
+  const keys = Object.keys(data);
+  for (let i = 0; i < keys.length; i++) {
+  // เก็บ key ไว้
+  const key = keys[i];
+  
+  document.getElementById(key).value=data[key]
+  console.log(key, data[key]);
+  }
+  
+  });
+  </script> -->
+
+{%endblock%}

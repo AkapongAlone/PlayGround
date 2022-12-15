@@ -1,0 +1,21 @@
+-- drop PK constraint if it exists
+IF EXISTS (SELECT * FROM sys.key_constraints WHERE type = 'PK' AND parent_object_id = OBJECT_ID('dbo.YourTable') AND Name = 'PK_YourTable')
+   ALTER TABLE dbo.YourTable
+   DROP CONSTRAINT PK_YourTable
+GO
+
+-- drop column if it already exists
+IF EXISTS (SELECT * FROM sys.columns WHERE Name = 'RowId' AND object_id = OBJECT_ID('dbo.YourTable'))
+    ALTER TABLE dbo.YourTable DROP COLUMN RowId
+GO
+
+-- add new "RowId" column, make it IDENTITY (= auto-incrementing)
+ALTER TABLE dbo.YourTable 
+ADD RowId INT IDENTITY(1,1)
+GO
+
+-- add new primary key constraint on new column   
+ALTER TABLE dbo.YourTable 
+ADD CONSTRAINT PK_YourTable
+PRIMARY KEY CLUSTERED (RowId)
+GO

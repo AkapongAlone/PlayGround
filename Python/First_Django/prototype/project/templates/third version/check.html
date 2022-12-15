@@ -1,0 +1,120 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+<h1 align='center' >ตรวจสอบข้อมูล</h1>
+<h2 align='center' >partname : {{partname}} </h2>
+
+<div class="container mt-3" >
+  
+    <!-- <h3 align='center'>วัดครั้งที่:{{num}}</h3>     -->
+ 
+  
+    
+      
+    <table class="table table-lg table-dark table-striped">
+        <thead>
+            <tr>
+                <th>ลำดับจุดวัด</th>
+                <th class="center">จุดวัด</th>
+                <th>Sheet</th>
+                <th>Tool</th>
+                <th>ค่าวัด</th>
+                <th></th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in alllist   %}
+            <form action="edit" method="POST" id="{{p.rid}}">
+                {% csrf_token %}
+           
+            <tr>
+                 <td> {{forloop.counter}}</td> 
+                <td > {{ p.point }}</td>
+                <td>{{p.sheet}}</td>
+                <td>{{p.toolname}}</td>
+                {% if p.result_gonogo == None %}
+                <td ><input type="text" name="value" class="form-control-lg" value="{{p.result}}" onclick="this.focus();this.select()" > </td>
+              
+                  {%endif%}
+                  {% if p.result == None %}
+                   
+                <td > <select name="value" class="custom-select-md custom-select" style="width: 50%;" >
+                   
+                    {% if p.result_gonogo == 'go' %} 
+                    <option  value ='{{p.result_gonogo}}' >OK </option>   
+                    <option  value ='nogo' >NG </option> 
+                    {%else%}  
+                    <option  value ='{{p.result_gonogo}}' >NG </option>   
+                    <option  value ='go' >OK </option>
+                    {%endif%}       
+                   
+                  </select></td> {%endif%}
+                <td> <input type="submit"  class="btn btn-success" style="float:right;"  value="Submit" ></td>
+               
+
+            </tr>
+            <input type="hidden"  name="partno" value="{{partno}}" >
+            <input type="hidden"  name="pattern" value="{{pattern}}" >
+            <input type="hidden" name="tooltype" value="{{p.tooltype}}">
+            <input type="hidden" name="partname_rev" value="{{p.partname}}">
+            <input type="hidden" name="partname" value="{{p.partname}}">
+            <input type="hidden" name="rid" value="{{p.rid}}">
+            <input type="hidden" name="wid" value="{{p.wid}}">
+            <input type="hidden" name="model" value="{{model}}">
+            <input type="hidden" name="man_regis" value="{{man_regis}}" >
+            <input type="hidden" name='shift' value="{{shift}}"> 
+        </form>
+            {% endfor %}
+            
+        </tbody>
+
+    </table>   
+     <form action="first" method="POST" >
+            {% csrf_token %}
+            <input type="hidden" name="model" value="{{model}}">
+            <input type="hidden" name="partname_rev" value="{{partname}}">
+            <input type="hidden" name="partname" value="{{p.partname}}">
+            <input type="hidden" name="man_regis" value="{{man_regis}}" >
+            <input type="hidden" name='shift' value="{{shift}}"> 
+            <input type="hidden"  name="pattern" value="{{pattern}}" >
+            <input type="hidden"  name="partno" value="{{partno}}" >
+    <div class="row justify-content-end">   
+        <div class="col-10"> <input type=button class="btn btn-danger f16" value="Back" onClick="javascript:history.go(-1);">  </div>
+       
+      {% if finish == None %}
+        <div class="col">   <input type="submit"  class="btn btn-primary f16" style="float:left;"  value="Continue" ></div> 
+        {%else%}
+        <div class="col"><a href='/'> <button type="button" name="check" class="btn btn-primary f16" value="{{finish}}" style="float:right;" >{{finish}} </button></a></div> 
+            {%endif%}
+    
+    </div></form>
+       
+          
+    
+       
+     
+      </div>
+     
+  
+    
+      </div>
+   <br>
+
+</div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
+  
+    window.onbeforeunload = function(e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+    };
+  </script>  
+
+
+{%endblock%}

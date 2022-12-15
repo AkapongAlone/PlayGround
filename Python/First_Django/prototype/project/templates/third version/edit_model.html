@@ -1,0 +1,145 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+
+{% if pattern == None %}
+
+<form action="editmodel" method="POST" >
+    {% csrf_token %}
+<div class="input-group input-group-lg" id="parent">
+    <div class="input-group-prepend">
+        <span class="input-group-text">Part Name </span>
+           </div>
+        <select   name="partname" id="partname" onchange="Pt(this.value)" required >
+                <option value="" disabled selected>select partname</option>
+           {% for i in partname %}
+           <option  value ='{{i.partname}}'  >{{i.partname}} </option>
+           {% endfor %}
+       
+            </select>
+          
+
+
+
+        <div class="input-group-prepend">
+        <span class="input-group-text">Model </span>  
+        </div>
+        <select class="input custom-select-lg custom-select" name="model" id="model" style="width: 200px;" required  >
+           
+        </select>
+        <div class="invalid-feedback">
+            Please select a Model.
+        </div>
+        
+        <div class="input-group-prepend">
+            <input type="submit" class="btn btn-primary">
+
+        </div>
+</div>
+</form>
+{%else%}
+{% if pattern != None %}
+
+<form action="change_pattern" method="POST">
+
+<div class="input-group input-group-lg" > 
+    <div class="input-group-prepend">
+        <span class="input-group-text">Pattern </span>
+           </div>
+<select class="input custom-select-lg custom-select" name="pattern"   required  >
+           {% for i in pattern_list %}
+           {% if i.name == pattern %}
+           <option value="{{i.name}}" selected>{{i.name}}</option>
+           {%else%}
+           <option value="{{i.name}}">{{i.name}}</option>
+           {%endif%}
+           {%endfor%}
+</select>
+</div>
+<br>
+<table class="table table-lg table-dark table-striped">
+    <thead>
+        <tr>
+            <th>ลำดับจุดวัด</th>
+            <th class="center">จุดวัด</th>
+           
+            
+           
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in point   %}
+     
+            {% csrf_token %}
+       
+        <tr>
+             <td> {{forloop.counter}}</td> 
+            <td > {{ p.point }}</td>
+        </tr>
+
+        <input type="hidden"  name="old_pattern" value="{{pattern}}" >
+        <input type="hidden" name="tooltype" value="{{p.tooltype}}">
+        <input type="hidden" name="partname_rev" value="{{p.partname}}">
+        <input type="hidden" name="partname" value="{{partname}}">
+        <input type="hidden" name="rid" value="{{p.rid}}">
+        <input type="hidden" name="wid" value="{{p.wid}}">
+        <input type="hidden" name="model" value="{{model}}">
+        <input type="hidden" name="man_regis" value="{{man_regis}}" >
+        <input type="hidden" name='shift' value="{{shift}}"> 
+   
+        {% endfor %}
+        
+    </tbody>
+
+</table> 
+<input type="submit" class="btn btn-primary" value="Change Pattern"></form>
+{%endif%}
+{%endif%}
+<script>
+     function Pt(value){
+        var d = new FormData();
+// var excelfile = document.querySelector('#excel_file');
+
+    d.append("partname",value);
+
+    axios({
+        url:'editmodel',
+    method:'post',
+    data:d,
+    headers:{'X-Requested-With':'XMLHttpRequest','Content-Type': 'multipart/form-data'},
+    xsrfCookieName:'csrftoken',
+    xsrfHeaderName:'X-CSRFToken'
+
+    })
+    .then(response => {
+    var select = document.getElementById("model");
+    var length = select.options.length;
+    for (i = length-1; i >= 0; i--) {
+    select.options[i] = null;
+    }
+    var model = response.data.model
+    console.log(model)
+    var select = document.getElementById("model");
+    for(s in model ) {
+        console.log(s)
+        var option = document.createElement('option');
+        option.text = option.value = model[s];
+        select.add(option);
+
+    };
+
+    })}
+
+</script>
+
+<script>
+      
+    $('#partname').select2({
+      dropdownParent: $('#parent'),
+      theme: " custom-select-lg custom-select "
+  });
+</script>
+
+{%endblock%}
+
+

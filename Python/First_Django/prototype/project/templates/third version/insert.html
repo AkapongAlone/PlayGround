@@ -1,0 +1,332 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+<style>
+
+  div.wrapper {
+    z-index: -1;
+  }
+  </style>
+<div style="display: none" id="hideAll">&nbsp;</div>
+
+<script type="text/javascript">
+  document.getElementById("hideAll").style.display = "block";
+</script> 
+
+<script>
+  window.onload = function() 
+{ document.getElementById("hideAll").style.display = "none"; }
+
+</script>
+
+    <div class=" text-center " style="padding: 15px;"> <span class="lovebig"> <b>S-PACK PROGRAMMING </b> </span> <br>  <span class="subtitle"><b> Please insert all measurment points data</b></span>
+        </div>
+          <div class="row justify-content-around">
+      <div class=" form-group  p-3 "  id="col2">  
+        <div class="row justify-content-center mt-1">  
+      
+          <div class="col ml-5 ">
+            <span class="f26" ><b> Machine Number: {{vallist.machine_no}} </b></span> <br> <span class="f26" ><b> Measurement Tool : {{vallist.toolname}} </b></span>  <br>   <span class="f26" ><b> Sheet : {{vallist.sheet}} </b></span> <br> 
+             </div> 
+              <div class="col-1 "></div>
+            <div class="col"> <span class="f26" ><b> Measurement Point : {{finish}}/{{all}} </b></span> <br> <span class="f26" ><b> Unmeasured Point : {{wait}} จุด </b></span> <br> 
+            <h3 ><b> ความคืบหน้า :{{percent}}% </b></h3>   
+          </div> 
+        
+        </div>
+          
+         
+        </div></div>
+        <div class=" container">
+          <span class="f26" >
+          <b>  Measurement Name : {{vallist.point}}   </b></span><br>
+     
+   <div class="row">
+        <div class="col-6"> <img src="/static/img/{{vallist.img}}" class="img-fluid rounded center" style="max-width: 100%;
+          height: auto;" alt="รูปประกอบ"></div>
+    {% if vallist.tooltype == "gonogo"%}
+    <!-- <div class="from-group">  -->
+     
+     
+        <div class="col-6">        
+     
+         
+         
+
+          
+             <form action="process" method="POST" name="{{vallist.wid}}" id="id">
+                        {% csrf_token %} 
+              <div class="form-check"> 
+                <input type="hidden"  name="pattern" value="{{pattern}}" >  
+                <input type="hidden" name='rid' value="{{vallist.rid}}">  
+                <input type="hidden" id='today' name="today" value="{{today}}">
+                <input type="hidden" name="man_regis" value="{{man_regis}}" >
+                <input type="hidden" name="Partname" value="{{Partname}}" >
+                <input type="hidden" name="point" value='{{vallist.point}}'> 
+                <input type="hidden" name='model' value="{{model}}">
+                <input type="hidden" name="shift" value='{{shift}}'>
+                <input type="hidden" id='{{wid}}_man' name="man" value="">
+                <input type="hidden" name="name" id="id" value='{{vallist.wid}}'>     
+                <input type="hidden" name="wid" value='{{vallist.wid}}'>        
+                <input type="hidden" id='{{x.point}}_{{k}}_man' name="man" value="">
+                <input type="hidden" name='tool' value="{{vallist.toolname}  }">
+                <input type="hidden" name='tooltype' value= "{{vallist.tooltype}}">
+                <input type="hidden" name='timein' value="{{timein}}"> 
+                <input type="hidden" name='location' value="{{location_next}}">  
+                <input type="hidden" name='shift' value="{{shift}}">  
+                <input type="hidden" name='excel' value="{{vallist.excel}}"> 
+                <input type="hidden" name='partname' value="{{vallist.partname}}"> 
+                <input type="hidden" name='cstart' value="{{vallist.cstart}}"> 
+                <input type="hidden" name='rstart' value="{{vallist.rstart}}"> 
+                <input type="hidden" name='sheet' value="{{vallist.sheet}}">
+                <input type="hidden" name='model' value="{{model}}">     
+                <input type="hidden"  name="partno" value="{{partno}}" >
+           <br>
+           <div class="row">
+           <div class="col-6 "> <div class="form-check form-check-inline">  <input class="form-check-input" type="radio" name="value" id="go" value="go"  onclick="No(this.id)"> 
+            <label class="form-check-label" for="{{vallist.wid}}_go">
+              {% if vallist.toolname != 'VISUAL'  %}
+           <h3> <span class="badge badge-primary f16" style="font-size: larger;">GO</span></h3>
+           {%else%}
+           <h3> <span class="badge badge-primary f16" style="font-size: larger;">OK</span></h3>
+           {%endif%}
+                        </label>  </div> </div>
+                        <div class="col-6 ">
+                        <div class="form-check form-check-inline"> 
+                  
+                        <input class="form-check-input" type="radio" name="value" id="nogo" value="nogo" onclick="No(this.id)"> 
+                        <label class="form-check-label" for="{{vallist.wid}}_nogo">
+                          {% if vallist.toolname != 'VISUAL'  %}
+                        <h3> <span class="badge badge-danger f16" style="font-size: larger;">NOGO</span> </h3> 
+                        {%else%}
+                        <h3> <span class="badge badge-danger f16" style="font-size: larger;">NG</span></h3>
+                        {%endif%}
+                        </label> <br>  </div>  </div> </div> <br>  
+                         <div class="container" > <div class="row justify-content-between"> 
+                           
+                          <div class="col ">
+                           
+                          <input type=button class="btn btn-danger btn-lg f16" style="width: 100px;" value="Back" onClick="javascript:history.go(-1);"></div> 
+                          <div class="col "><button type="button" name="check" class="btn btn-warning btn-lg" style="width: 100px;" onclick="Go(this.name)" >
+                            <span class="f16"> Edit</span> </button></div> 
+                            <div class="col"> <button type="button" name="check" class="btn btn-dark btn-lg f16" id="skip_butt"   onclick="Skip()" >Skip </button></div>
+                          </div> <input type="hidden" name="value" id="value"> </form> </div>
+                   
+                    
+                        
+         
+          </div>     <br> <br>  
+                        </div></div> </div>
+                           
+    
+    </div> 
+           
+      {% else %}
+      <div class="col-6">  
+      <div class="from-group">
+           
+         
+            
+            
+            
+            
+             <form action="process" method="POST" name="insert"   onsubmit= "checkForm()" >
+                        {% csrf_token %}
+                 <div class="center">  
+                  <input type="hidden"  name="partno" value="{{partno}}" >
+                
+                  <input type="hidden"  name="pattern" value="{{pattern}}" >  
+                 <input type="hidden" name='rid' value="{{vallist.rid}}">  
+                <input type="hidden" id='today' name="today" value="{{today}}">
+                <input type="hidden" name="man_regis" value="{{man_regis}}" >
+                <input type="hidden" name="partname" value="{{partname}}" >
+                <input type="hidden" name="point" value='{{vallist.point}}'> 
+                <input type="hidden" name="min" id="min" value='{{vallist.min}}'> 
+                <input type="hidden" name="max" id="max" value='{{vallist.max}}'> 
+            
+                <input type="hidden" name="shift" value='{{shift}}'>
+                <input type="hidden" id='{{wid}}_man' name="man" value="">
+                <input type="hidden" name="name" id="id" value='{{vallist.wid}}'>     
+                <input type="hidden" name="wid" value='{{vallist.wid}}'>        
+                <input type="hidden" id='{{x.point}}_{{k}}_man' name="man" value="">
+                <input type="hidden" name='tool' value="{{vallist.toolname}">
+                <input type="hidden" name='tooltype' value="{{vallist.tooltype}}">
+                <input type="hidden" name='timein' value="{{timein}}"> 
+                <input type="hidden" name='location' value="{{location_next}}">  
+                <input type="hidden" name='shift' value="{{shift}}">  
+                <input type="hidden" name='excel' value="{{vallist.excel}}"> 
+                <input type="hidden" name='partname' value="{{vallist.partname}}"> 
+                <input type="hidden" name='cstart' value="{{vallist.cstart}}"> 
+                <input type="hidden" name='rstart' value="{{vallist.rstart}}"> 
+                <input type="hidden" name='sheet' value="{{vallist.sheet}}">
+                <input type="hidden" name='model' value="{{model}}">
+               
+                               
+               <br> <input type="number" step="0.001" class="form-control" id="result"  name="value" placeholder="Enter value"  value="" required  autofocus autocomplete="off" /> <br>  </div>
+             
+                </div> 
+                <div class="row justify-content-between">   
+              <div class="col"> <input type=button class="btn btn-danger btn-lg f16" value="Back" onClick="javascript:history.go(-1);">  </div>
+              <div class="col"> <button type="button" name="check" class="btn btn-warning btn-lg f16"  onclick="Go(this.name)" >Edit </button></div>
+              <div class="col"> <button type="button" name="check" class="btn btn-dark btn-lg f16" id="skip_butt"  onclick="Skip()" >Skip </button></div>
+              <div class="col ">  
+                <!-- <button type="button" name="{{vallist.wid}}" class="btn btn-primary btn-lg" style="float:right;" onclick="Check(this.name)"  > Submit  </button> -->
+             
+              <input type="submit" name="insert" id="wait" class="btn btn-primary btn-lg f16" value="Submit " >
+              </div> </form> 
+             
+              </div> <br>
+                        
+               
+                        <br> <br>
+          </div>   {%endif%} <br>
+          <form action="check" method="POST"  id="check"> 
+            {% csrf_token %}
+            <input type="hidden"  name="pattern" value="{{pattern}}" >  
+            <input type="hidden" name='model' value="{{model}}">
+            <input type="hidden" name="partname" value="{{partname}}" >
+            <input type="hidden" name="man_regis" value="{{man_regis}}" >
+            <input type="hidden" name='shift' value="{{shift}}">  
+            <input type="hidden"  name="partno" value="{{partno}}" >
+          </form>
+
+
+            <form action="skip" method="post"  id="skip" onsubmit= "checkForm()" >
+              {% csrf_token %}
+              <input type="hidden"  name="pattern" value="{{pattern}}" >  
+              <input type="hidden" name='tool' value="{{vallist.toolname}">
+              <input type="hidden" name='tooltype' value="{{vallist.tooltype}}">
+              <input type="hidden" name='location' value="{{location_next}}"> 
+              <input type="hidden" name='model' value="{{model}}">
+              <input type="hidden" name='partname' value="{{vallist.partname}}"> 
+              <input type="hidden" name="point" value='{{vallist.point}}'> 
+              <input type="hidden" name='rid' value="{{vallist.rid}}">  
+            <input type="hidden" name="man_regis" value="{{man_regis}}" >
+            <input type="hidden" name='shift' value="{{shift}}"> 
+            <input type="hidden"  name="partno" value="{{partno}}" >
+            <input type="hidden" name='excel' value="{{vallist.excel}}"> 
+            <input type="hidden" name='sheet' value="{{vallist.sheet}}">
+            </form>
+                  
+                
+  </div>
+  </div>
+  </div></div>
+<script>
+  
+  function checkForm() // Submit button clicked
+  {
+    var a= document.getElementById('skip_butt');
+  
+    a.disabled = true;
+    a.value = "Please wait...";
+    var b = document.getElementById('wait');
+    console.log(b.value);
+    b.disabled = true;
+    b.value = "Please wait...";
+    // document.getElementById(id).submit()
+  }
+</script>
+  <script >
+    function Regis() {
+    var m =document.getElementById('men').value;
+  
+    
+    document.getElementById('man_regis').value=m;
+  
+    console.log(document.getElementById('shift').value)
+    console.log(document.getElementById('round').value)
+    document.getElementById('regis').submit();
+  }                      
+    </script>
+  
+  <script >
+    function Check(id) {
+    var min =  parseFloat(document.getElementById('min').value);
+    var max =  parseFloat(document.getElementById('max').value);
+    var result =  document.getElementById('result').value;
+    if ( result<min || result>max ){
+
+      alert('ค่าเกินกำหนด');
+            
+            return false;
+    }
+    console.log(id)
+    document.getElementById(id).submit();
+  }                      
+    </script>
+
+
+<script >
+function Go(id) {
+
+
+document.getElementById(id).submit();
+}       
+
+function Skip() {
+
+var a= document.getElementById('skip_butt');
+  
+a.disabled = true;
+a.value = "Please wait...";
+document.getElementById('skip').submit();
+}    
+</script>
+
+<script >
+function No(id) {
+var b=document.getElementsByClassName('form-check-input');
+document.getElementById('value').value=document.getElementById(id).value
+var i;
+for (i = 0; i < b.length; i++) {
+  b[i].disabled = true;
+}
+console.log(document.getElementById('value').value)
+document.getElementById('id').submit();
+}                      
+</script>
+
+
+
+
+<!-- โค้ดเอาค่าที่เคยกรอกไว้มาลง -->
+<!-- <script>
+$(document).ready(function() {  
+var data = JSON.parse('{{bigdic|safe}}');
+
+
+// สร้าง list of keys
+const keys = Object.keys(data);
+for (let i = 0; i < keys.length; i++) {
+// เก็บ key ไว้
+const key = keys[i];
+
+document.getElementById(key).value=data[key]
+console.log(key, data[key]);
+}
+
+});
+</script> -->
+
+
+
+
+
+
+
+
+
+
+
+  <!-- <script>
+      function clicked(e)
+      {
+          if(!confirm('กรุณาตรวจสอบความถูกต้องPartname. และ Process Name')) {
+              e.preventDefault();
+          }
+      }
+      </script> -->
+  
+        
+{%endblock%}

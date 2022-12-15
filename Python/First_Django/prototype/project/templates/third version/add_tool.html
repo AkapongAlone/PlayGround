@@ -1,0 +1,58 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+<div class="container">
+  
+   <h1 class="text-center f" > Add Tool name and Series number </h1> </div>
+    
+
+  
+<form id="form" action="add_tool" method="POST" name="form" enctype="multipart/form-data" onsubmit="return Check(this.name)"> 
+    {% csrf_token %}
+    <div class="input-group input-group-lg">
+        <span class="input-group-text " id="inputGroup-sizing-lg">Tool name and Series number </span>
+        <input type="text" aria-label="toolname" name="toolname" class="form-control" aria-describedby="inputGroup-sizing-lg" required>
+        <input type="text" aria-label="serialname" name="series" class="form-control"  aria-describedby="inputGroup-sizing-lg">
+      </div>
+      <br>
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="tooltype"  id="tooltype">
+        <option selected disabled>Select Tooltype</option>
+        <option value="value">Value</option>
+        <option value="gonogo">GO/NOGO</option>
+      
+      </select>
+      <input type="submit" class="btn btn-primary f18" style="float:right;" value="Add Tool">
+</form></div>
+
+
+<script >
+  function Check(id) {
+  var type =  document.getElementById('tooltype').value;
+  console.log(type=='value')
+  
+  
+  if ( type!='value' && type!='gonogo' ){
+
+    alert('กรุณากรอกชนิดเครื่องมือ');        
+    return false;
+  }
+  console.log(id)
+  // document.getElementById(id).submit();
+}                      
+  </script>
+
+<!-- code เลื่อนกลับมาที่เดิมก่อนรีเฟรชอัตโนมัติ -->
+<script>
+document.addEventListener("DOMContentLoaded", function(event) { 
+var scrollpos = localStorage.getItem('scrollpos');
+if (scrollpos) window.scrollTo(0, scrollpos);
+});
+
+window.onbeforeunload = function(e) {
+localStorage.setItem('scrollpos', window.scrollY);
+};
+</script>        
+
+
+
+{%endblock%}

@@ -1,0 +1,81 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+<!----------------------------------------------------- ตอนกดเข้าหน้าAdd ครั้งแรก ------------------------------>
+{% if messages %}
+{% for message in messages %}
+
+
+  {% if  message|stringformat:"s"  == "Successful" %}
+  <div class="alert alert-success" role='alert'><b>{{message}}</b>
+   </div>
+   {% else %}
+   <div class="alert alert-danger" role='alert'><b>{{message}}</b></div>{%endif%}
+   {%endfor%}{%endif%}
+<h1 class="f"><b> Add Master Data by CSV file </b></h1> 
+<form id="form" action="csv" method="POST" enctype="multipart/form-data"> 
+    {% csrf_token %}
+<input type="file" class="form-control-file" accept=".csv"id="excel_file"  name="choose_file" onchange="return excelValidation()" > 
+<br>
+<input type="submit" class="btn btn-primary f16" value="excute">
+</form>
+
+
+    <script>
+        function clicked(e)
+        {
+            if(!confirm('กรุณาตรวจสอบความถูกต้อง')) {
+                e.preventDefault();
+            }
+        }
+        </script>
+
+
+
+
+
+ <!--check file type -->
+
+<script>
+    function fileValidation() {
+        var fileInput = 
+            document.getElementById('img_file');
+          
+        var filePath = fileInput.value;
+      
+        // Allowing file type
+        var allowedExtensions = 
+        /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+     
+    }
+</script>
+
+<script>
+    function excelValidation() {
+        var fileInput = 
+            document.getElementById("excel_file");
+          
+        var filePath = fileInput.value;
+      
+        // Allowing file type
+        var allowedExtensions = 
+        /(\.csv)$/i;
+          
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type');
+            fileInput.value = '';
+            return false;
+        } 
+        
+    }
+</script>
+ <!-- code onchange +disable -->
+
+
+{%endblock%}

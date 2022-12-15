@@ -1,0 +1,299 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insepction</title>
+    
+    <link rel="stylesheet" href="{% static 'template web/css/bootstrap.min.css' %}">
+    <script src="{% static 'template web/umd/popper.min.js'%}"></script>
+    <script src="{% static 'template web/js/bootstrap.min.js'%}" ></script>
+    <link rel="stylesheet" href="{% static 'template web/css/4.5.2/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'template web/css/all.css'%}"/>
+    <link rel="stylesheet" href="{% static 'template web/css/bg.css'%}"/>
+    <script src="{% static 'template web/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'template web/js/bootstrap.bundle.min.js'%}" ></script>
+    <!-- โค้ดdepend dropdown + เดาคำ -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js" integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="{% static 'template web/js/select2.min.js'%}"  referrerpolicy="no-referrer"></script>
+    <script src="{% static 'template web/js/axios.min.js'%}"  referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="{% static 'template web/css/select2.min.css'%}"  referrerpolicy="no-referrer" />
+  
+    <link rel="stylesheet" href="{% static 'template web/css/lora.css'%}"  referrerpolicy="no-referrer" />
+    <!-- <script  defer>
+      document.addEventListener('click',e => {
+const isDropdownButton = e.target.matches("[data-dropdown-button]")
+if (!isDropdownButton && e.target.closest('[data-dropdown]') != null ) return
+
+let currentDropdown
+if (isDropdownButton){
+  currentDropdown=e.target.closest("[data-dropdown]")
+  currentDropdown.classList.toggle("active")
+}
+
+document.querySelectorAll("[data-dropdown].active").forEach(dropdown => {
+if (dropdown === currentDropdown) return
+dropdown.classList.remove("active")
+
+})
+
+      })
+
+    </script> -->
+    <style>
+      @font-face {
+    font-family: 'Lovelo';
+    font-style: normal;
+    font-weight: 900;
+    src: local('Lovelo'), url("{% static 'template web/css/Lovelo.woff'%}") format('woff');
+}
+
+      </style> 
+    <style>
+      img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.f{
+  font-family:'Lovelo', sans-serif;
+}
+      body {background-color: #ffffff;}
+     
+#tb1 {
+  background-color: white;
+  /* Preserve aspet ratio */
+}
+.text1 {
+  color: rgb(226, 10, 10);
+  /* Preserve aspet ratio */
+}
+      
+      </style>
+     
+
+    <!-- code dependent drop down + search engine  -->
+    <!-- <script>
+        $(document).ready(function()
+        {
+          var $select1=$('#select1'),
+              $select2=$('#select2'),
+              $options=$select2.find('option');
+              
+              $select1.on('change',function()
+              { 
+                let tool = this.value;
+                console.log(typeof this.value);
+                console.log(this.value);
+                $select2.html($options.filter('[value="'+this.value+'"]'));
+              }).trigger('change');
+        });
+    </script>
+    <script>
+      $(document).ready(function()
+      {
+        $("#select1").select2({});
+        $("#select2").select2({});
+      });
+    </script> -->
+    
+    <style>
+      optgroup {
+        font-family:'Lovelo', sans-serif;
+        font-size:26px;
+      }
+      .c{
+      font-size: 124%;}
+     
+    </style>
+  
+  <style>
+    /* .link{
+      background: none;
+      border: none;
+      text-decoration: none;
+      color: #777;
+      font-family: 'Lovelo', sans-serif;
+      font-size: inherit;
+      cursor: pointer;
+      
+    }
+
+    .dropdownn > .link:focus,
+    .link:hover{
+      color: black;
+    }
+    .dropdownn{
+      position: relative;
+    }
+    .dropdown-menuu{
+      position: absolute;
+      left: 0;
+      top: cal(100% + .25rem);
+      background-color: white;
+      padding: .75rem;
+      border-radius: .25rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 150ms ease-in-out , transform 150ms ease-in-out  ;
+    }
+    .dropdownn > .link:focus + .dropdown-menuu{
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    } */
+  /* #hideAll{
+    position: fixed;
+    left: 0px; 
+    right: 0px; 
+    top: 0px; 
+    bottom: 0px; 
+    background-color: white;
+    z-index: 99; /* Higher than anything else in the document 
+ 
+  } */
+  .mt20{
+    margin-top: 30px;
+    
+    width: 1000px;
+}
+  .headtop{
+    font-size: 22px; 
+    font-family:'Lovelo', sans-serif !important;
+
+  }
+  .headtop_c{
+    font-size: 16px; 
+    font-family:'Lovelo', sans-serif;
+
+  }
+  .f22{
+    font-size: 22px; 
+    font-family:'Lovelo', sans-serif;
+    font-weight: bold;
+
+  }
+  .f16{
+    font-size: 16px; 
+    font-family:'Lovelo', sans-serif;
+    color: #ffffff;
+    /* font-weight: bold; */
+
+  }
+
+  .f26{
+    font-size: 26px; 
+    font-family:'Lovelo', sans-serif;
+
+  }
+  .lovebig{
+    text-align: center;
+    font-family:'Lovelo', sans-serif;
+    font-size: 43px; 
+  }
+  .subtitle{
+  font-family: Lora,'Lovelo', sans-serif;  
+  font-size: 16px; 
+
+}
+
+  
+  #col2{
+    background-color: rgb(255, 255, 255);
+   
+    border-radius: 10px 10px 10px 10px;
+    border-style: solid;
+    border-width: thin;
+    box-shadow: 5px 10px;}
+  
+  
+  </style>
+  </head>
+<body   onload="startTime()">
+
+  
+  
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #eaecee;">
+        <div class="container-fluid">
+          <img src="/static/logo/Logo-SMP-2019.png" class="float-left" width="120" height="80" alt="รูปประกอบ">
+          
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/"><span class="headtop"> <b>Home</b> </span></a>
+              </li>
+              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="headtop">
+                 <b> Add New Data</b></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="add"><span class="headtop_c"> <b>Master Data</b> </span></a>
+                  <a class="dropdown-item" href="csv"><span class="headtop_c"> <b>Master Data by csv</b> </span></a>
+                  <!-- <a class="dropdown-item" href="wi"><span class="headtop_c"> <b>Work Instruction</b> </span></a> -->
+                  <a class="dropdown-item" href="add_tool"><span class="headtop_c"> <b>Measurment Tool</b> </span></a>
+                  <!-- <a class="dropdown-item" href="admin"><span class="headtop_c"> <b>Edit Setting</b> </span></a> -->
+                  <a class="dropdown-item" href="pattern"><span class="headtop_c"> <b>pattern</b> </span></a>
+                  <!-- <a class="dropdown-item" href="editmodel"><span class="headtop_c"> <b>Overview Data</b> </span></a> -->
+                  
+                  <!-- <a class="dropdown-item" href="delete"><span class="headtop_c"> <b>Delete Data </b> </span></a> -->
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="headtop">
+                  <b> Edit Master Data</b></span>
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="admin"><span class="headtop_c"> <b>Admin mode</b> </span></a>
+                  
+                  <a class="dropdown-item" href="delete"><span class="headtop_c"> <b>Delete Data </b> </span></a>
+                </div>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link active" aria-current="page" href="editmodel"><span class="headtop"> <b>Overview Data</b> </span></a>
+                
+              </li>
+            </ul>
+          <form class="form-inline">
+            <img src="/static/logo/logo-S-PACK-1 png.png" width="160" height="60" alt="รูปประกอบ">
+            
+              </form>
+     </div>    </div>
+      </nav>
+     
+    
+        <div class="col justify-content-end" id="txt" align='right '></div>
+        <div class="container">
+            {%block content%}
+
+            {%endblock%}
+</div>
+   
+      <script src="{% static 'template web/js/bootstrap.bundle.min.js'%}" ></script>
+      <script>
+        function startTime() {
+          const today = new Date();
+          let h = today.getHours();
+          let m = today.getMinutes();
+          let s = today.getSeconds();
+          m = checkTime(m);
+          s = checkTime(s);
+          document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
+          setTimeout(startTime, 1000);
+        }
+        
+        function checkTime(i) {
+          if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+          return i;
+        }
+        </script>
+     
+</body>
+</html>

@@ -1,0 +1,127 @@
+{%extends 'layout.html'%}
+
+{%block content %}
+
+
+{% if messages %}
+{% for message in messages %}
+
+
+  {% if  message|stringformat:"s"  == "Successful" %}
+  <div class="alert alert-success" role='alert'><b>{{message}}</b>
+   </div>
+   {% else %}
+   <div class="alert alert-danger" role='alert'><b>{{message}}</b></div>{%endif%}
+   {%endfor%}{%endif%}
+
+
+
+<form action="delete" method="POST" >
+    {% csrf_token %}
+<div class="input-group input-group-lg" id="parent">
+    <div class="input-group-prepend">
+        <span class="input-group-text">Part Name </span>
+           </div>
+        <select   name="partname" id="partname" onchange="Pt(this.value)" required >
+                <option value="" disabled selected>select partname</option>
+              
+                {% for i in partname %} 
+                {% if sel_partname != None %}
+                  {% if i.partname == sel_partname %}
+                    <option  value ='{{i.partname}}' selected >{{i.partname}} </option>  
+                    {% else %} 
+                    <option  value ='{{i.partname}}'  >{{i.partname}} </option> 
+                    {% endif %}  
+                  {% else %} 
+                  
+                  <option  value ='{{i.partname}}'  >{{i.partname}} </option> 
+                {% endif %}     
+                {%endfor%} 
+       
+            </select>
+          
+
+
+
+        <div class="input-group-prepend">
+        <span class="input-group-text">Model </span>  
+        </div>
+        <select class="input custom-select-lg custom-select" name="model" id="model" style="width: 200px;" required  >
+            <option value="" disabled selected>select Model</option>
+            <option  value ='{{model}}'  >{{model}} </option>
+         
+        
+        </select>
+        <div class="invalid-feedback">
+            Please select a Model.
+        </div>
+        
+        <div class="input-group-prepend">
+            <input type="submit" class="btn btn-danger f16" value="DELETE" onclick="clicked(event)" >
+
+        </div>
+</div> 
+
+<br>
+
+<!-- <input type="submit" class="btn btn-primary" value="Change Pattern"> -->
+</form>
+
+<script>
+
+    function clicked(e)
+    {
+        if(!confirm('Are you sure?')) {
+            e.preventDefault();
+        }
+    }
+
+
+
+     function Pt(value){
+        var d = new FormData();
+// var excelfile = document.querySelector('#excel_file');
+
+    d.append("partname",value);
+
+    axios({
+        url:'delete',
+    method:'post',
+    data:d,
+    headers:{'X-Requested-With':'XMLHttpRequest','Content-Type': 'multipart/form-data'},
+    xsrfCookieName:'csrftoken',
+    xsrfHeaderName:'X-CSRFToken'
+
+    })
+    .then(response => {
+    var select = document.getElementById("model");
+    var length = select.options.length;
+    for (i = length-1; i >= 0; i--) {
+    select.options[i] = null;
+    }
+    var model = response.data.model
+    console.log(model)
+    var select = document.getElementById("model");
+    for(s in model ) {
+        console.log(s)
+        var option = document.createElement('option');
+        option.text = option.value = model[s];
+        select.add(option);
+
+    };
+
+    })}
+
+</script>
+
+<script>
+      
+    $('#partname').select2({
+      dropdownParent: $('#parent'),
+      theme: " custom-select-lg custom-select "
+  });
+</script>
+
+{%endblock%}
+
+

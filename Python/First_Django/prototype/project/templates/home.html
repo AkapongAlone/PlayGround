@@ -1,0 +1,360 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insepction</title>
+   
+     <style>
+      @font-face {
+    font-family: 'Lovelo';
+    font-style: normal;
+    font-weight: 900;
+    src: local('Lovelo'), url("{% static 'template web/css/Lovelo.woff'%}") format('woff');
+}
+
+      </style> 
+                          
+   
+    <link rel="stylesheet" href="{% static 'template web/css/bootstrap.min.css' %}">
+    <script src="{% static 'template web/umd/popper.min.js'%}"></script>
+    <script src="{% static 'template web/js/bootstrap.min.js'%}" ></script>
+    <link rel="stylesheet" href="{% static 'template web/css/4.5.2/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'template web/css/all.css'%}"/>
+    <link rel="stylesheet" href="{% static 'template web/css/bg.css'%}"/>
+    <script src="{% static 'template web/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'template web/js/bootstrap.bundle.min.js'%}" ></script>
+    <!-- โค้ดdepend dropdown + เดาคำ -->
+    <script src="{% static 'template web/js/select2.min.js'%}"  referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="{% static 'template web/css/select2.min.css'%}"  referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" href="{% static 'template web/css/lovelo.css'%}"  referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="{% static 'template web/css/lora.css'%}"  referrerpolicy="no-referrer" />
+     
+    <style>
+      img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+      body {background-color: #ffffff;}
+     
+#tb1 {
+  background-color: white;
+  /* Preserve aspet ratio */
+}
+.text1 {
+  color: rgb(226, 10, 10);
+  /* Preserve aspet ratio */
+}
+      
+      </style>
+
+  <style>
+    
+  .mt20{
+    margin-top: 30px;
+    
+    width: 1000px;
+}
+  .headtop{
+    font-size: 22px; 
+    font-family:'Lovelo', sans-serif;
+
+  }
+  .headtop_c{
+    font-size: 18px; 
+    font-family:'Lovelo', sans-serif;
+  }
+  .love{
+    text-align: center;
+    font-family:'Lovelo', sans-serif;
+  }
+  .subtitle{
+  font-family: Lora,'Lovelo', sans-serif;  
+  font-size: 16px; 
+
+}
+ 
+  .f22{
+     font-family: "Bodoni MT", Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3 { font-family: "Bodoni MT", Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 15.4px; } p { font-family: "Bodoni MT", Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: "Bodoni MT", Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: "Bodoni MT", Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; 
+    
+     font-size: 22px; 
+    font-weight: bold;
+
+  }
+  body {
+	
+	background-image: url('{%static "logo/WELCOME.png" %}');
+	 height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+
+
+background-attachment: fixed;
+
+}
+
+  #col2{
+    background-color: #ffffff;
+   
+    border-radius: 10px 10px 10px 10px;
+    border-style: solid;
+    border-width: thin;
+    box-shadow: 5px 10px;}
+  
+  
+  </style>
+   <style>
+    optgroup {font-size: 28px;
+      font-family:'Lovelo', sans-serif;
+    }
+    .c{
+    font-size: 124%;}
+  </style>
+
+  </head>
+<body   onload="startTime()">
+
+  
+  
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
+        <div class="container-fluid">
+          <img src="/static/logo/Logo-SMP-2019.png" class="float-left" width="120" height="80" alt="รูปประกอบ">
+          
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/"><span class="headtop"> <b>Home</b> </span></a>
+              </li>
+              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="headtop">
+                 <b> Add New Data</b></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="add"><span class="headtop_c"> <b>Master Data</b> </span></a>
+                  <a class="dropdown-item" href="csv"><span class="headtop_c"> <b>Master Data by csv</b> </span></a>
+                  <!-- <a class="dropdown-item" href="wi"><span class="headtop_c"> <b>Work Instruction</b> </span></a> -->
+                  <a class="dropdown-item" href="add_tool"><span class="headtop_c"> <b>Measurment Tool</b> </span></a>
+                  <!-- <a class="dropdown-item" href="admin"><span class="headtop_c"> <b>Edit Setting</b> </span></a> -->
+                  <a class="dropdown-item" href="pattern"><span class="headtop_c"> <b>pattern</b> </span></a>
+                  <!-- <a class="dropdown-item" href="editmodel"><span class="headtop_c"> <b>Overview Data</b> </span></a> -->
+                  
+                  <!-- <a class="dropdown-item" href="delete"><span class="headtop_c"> <b>Delete Data </b> </span></a> -->
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="headtop">
+                  <b> Edit Master Data</b></span>
+                 </a>
+                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="admin"><span class="headtop_c"> <b>Admin mode</b> </span></a>
+                  
+                  <a class="dropdown-item" href="delete"><span class="headtop_c"> <b>Delete Data </b> </span></a>
+                </div>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link active" aria-current="page" href="editmodel"><span class="headtop"> <b>Overview Data</b> </span></a>
+                
+              </li>
+            </ul>
+          <form class="form-inline">
+            <img src="/static/logo/logo-S-PACK-1 png.png" width="160" height="60" alt="รูปประกอบ">
+            
+              </form>
+     </div>    </div>
+      </nav>
+     
+    
+        <!-- <div class="col justify-content-end" id="txt" align='right '></div> -->
+           
+<!-- <div  class=" text-center" style="padding:15px;">
+  <img src="/static/logo/SUMIPOL.jpg" class="rounded-circle" alt="รูปประกอบ"> 
+  </div> -->
+  <div class="row justify-content-center"> 
+    <div class="col-3"></div>
+    <div class="col mr-3 ">   <p class="love text-center" style="font-size: 65px; "><b >Welcome</b> </p>   <p class="text-center subtitle "  ><b >Please enter your information details below</b> </p>  </div>
+    <div class="col-3"></div>
+
+  </div>
+ <form id="form" action=''  method="POST" enctype="multipart/form-data"> 
+        {% csrf_token %}
+        <input type="hidden" id="partname_send" name="partname" >    
+        <input type="hidden" id="model_send" name="model" >  
+            
+      
+    </form> 
+    <form action="first"   method="POST" id="regis">
+                {% csrf_token %}   
+    <div class="col d-flex justify-content-around" >
+        <!-- <div class="col"> -->
+           
+          <input type="hidden"  name="pattern" value="{{pattern}}" >  
+          <div class="mt20 form-group"  id="col2"> 
+         
+          
+ 
+        <div class="row justify-content-center">
+        <div class="col ml-5 mt-2" id="parent">
+       <p class="f22">Part Name </p>
+        <select style="width: 100%;"  name="partname_select" id="partname" onchange="Pt()" required >
+          <optgroup >
+            <option  selected disabled value=""  >Select Partname </option>
+          {% for i in partname %} 
+          {% if sel_partname != None %}
+            {% if i.partname == sel_partname %}
+              <option  value ='{{i.partname}}' selected >{{i.partname}} </option>  
+              {% else %} 
+              <option  value ='{{i.partname}}'  >{{i.partname}} </option> 
+              {% endif %}  
+            {% else %} 
+            
+            <option  value ='{{i.partname}}'  >{{i.partname}} </option> 
+          {% endif %}     
+          {%endfor%} 
+        </optgroup>
+        </select>
+       
+    </div>
+    
+    
+    <div class="col"></div>
+    
+     <div class="col mr-5 mt-2">
+      <p class="f22">Model </p>  
+      <select class="input custom-select-lg custom-select" name="model" id="model" style="width: 200px;" required onchange="Pt()" >
+        <optgroup >
+      {% if model != None %}
+      <option  selected disabled value=""  >Select Model </option>
+          {% for i in model %} 
+              {% if sel_model != None %}
+                  {% if i.model == sel_model %}
+                      <option  value ='{{i.model}}' selected>{{i.model}} </option> 
+                  {% else %}
+                      <option  value ='{{i.model}}'>{{i.model}} </option>   
+                  {%endif%} 
+              {% else %}
+                
+                <option  value ='{{i.model}}'>{{i.model}} </option>   
+              {%endif%}      
+          {%endfor%} 
+        {%endif%}
+      </optgroup>
+      </select>
+      
+     </div></div>
+     <div class="row align-items-center">
+      <div class="col ml-5">
+        <p class="f22">Part Number </p>
+       
+        <input  type="text" class="form-control form-control-lg" name="partno" value="" placeholder="Enter Part Number" required autocomplete="off" >
+        
+     
+        
+     </div>
+     <div class="col"></div>
+     <div class="col mr-5 mt-2">
+        <p class="f22">Shift </p>
+       
+        
+        <select class="input custom-select-lg custom-select "  name="shift" id="shift" style="width: 180px;" >
+          <optgroup >   
+         {% for i in shift %}
+         <option value="{{i.name_shift}}">{{i.name_shift}}</option>
+         {%endfor%}
+        </optgroup>
+      </select>
+      
+       
+      </div>
+    
+      
+    </div>
+         <br>
+         <div class="row align-items-center">
+         <div class="col ml-5">
+          <p class="f22">Operator </p>
+       
+          <input  type="text" class="form-control form-control-lg" name="man_regis" value="" placeholder="Enter Operator's name" required>
+        </div>
+      <div class="col"></div><div class="col"></div>
+      </div>
+         <br>
+           
+            <div class="d-flex flex-column justify-content-center align-items-center "><input  type="image" style="width: 250px; height: 70px;" src="/static/logo/Picture7.png"     > </div>
+          
+          <br>
+          <input type="hidden" id="partname_rev" name="partname_rev" value="{{sel_partname}}" >
+   </form>
+       
+     
+ 
+
+
+
+    </div>
+    
+     
+    </div>
+          
+    <script>
+      
+      $('#partname').select2({
+        dropdownParent: $('#parent'),
+        theme: " custom-select-lg custom-select"
+   
+    
+   
+    });
+       
+    
+</script>
+   
+      <script src="{% static 'template web/js/bootstrap.bundle.min.js'%}" ></script>
+      <script>
+       
+        function Pt() {
+          var p = document.getElementById('partname').value;
+          var m = document.getElementById('model').value;
+         document.getElementById('partname_send').value = p ;
+         document.getElementById('model_send').value = m ;
+          document.getElementById('form').submit();
+    
+        }
+        </script>
+      
+      <script>
+        function startTime() {
+          const today = new Date();
+          let h = today.getHours();
+          let m = today.getMinutes();
+          let s = today.getSeconds();
+          m = checkTime(m);
+          s = checkTime(s);
+          document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
+          setTimeout(startTime, 1000);
+        }
+        
+        function checkTime(i) {
+          if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+          return i;
+        }
+        </script>
+
+</body>
+</html>
+
+
+
+ 
+
+
