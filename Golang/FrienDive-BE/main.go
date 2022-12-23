@@ -46,9 +46,9 @@ func main() {
 	r.POST("/register", regisHandle.Register)
 	r.POST("/login",loginHandle.Login)
 
-	protected := r.Group("",auth.Protect([]byte(os.Getenv("SIGN"))))
+	protected := r.Group("/users",auth.Protect([]byte(os.Getenv("SIGN"))))
 	readAll := readall.NewRegisterHandler(db)
-	protected.GET("/users/readall",readAll.ReadAll)
+	protected.GET("/readall",readAll.ReadAll)
 	ctx, stop := signal.NotifyContext(context.Background(),syscall.SIGTERM,syscall.SIGINT)  //ตัวรับสัญญานว่ามีการสั่งหยุดไหม
 	defer stop()
 
