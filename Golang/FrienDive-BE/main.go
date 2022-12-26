@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"friendDive/auth"
 	"friendDive/login"
-	"friendDive/register"
-	"friendDive/readall"
+	"friendDive/read"
+	Register "friendDive/register"
 	"log"
 	"net/http"
 	"os"
@@ -14,11 +14,11 @@ import (
 	"syscall"
 	"time"
 
+	db "friendDive/orm"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 func main() {
@@ -27,52 +27,46 @@ func main() {
 		log.Panicln("consider env var")
 	}
 
-	// dsn := os.Getenv("DB_CONN")
-	db, err := gorm.Open(sqlite.Open("testDB"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
-	db.AutoMigrate(&register.RegisterBody{})
+	db.InitDB()
 	r := gin.Default()
 	r.GET("/healthz", func(ctx *gin.Context) {
 		ctx.Status(200)
 	})
 
 	config := cors.DefaultConfig()
-  	config.AllowOrigins = []string{"http://google.com"}
+	config.AllowOrigins = []string{"http://google.com"}
 	r.Use(cors.New(config))
-	regisHandle := register.NewRegisterHandler(db)
-	loginHandle := login.NewLoginHandler(db)
-	r.POST("/register", regisHandle.Register)
-	r.POST("/login",loginHandle.Login)
 
-	protected := r.Group("/users",auth.Protect([]byte(os.Getenv("SIGN"))))
-	readAll := readall.NewRegisterHandler(db)
-	protected.GET("/readall",readAll.ReadAll)
-	ctx, stop := signal.NotifyContext(context.Background(),syscall.SIGTERM,syscall.SIGINT)  //ตัวรับสัญญานว่ามีการสั่งหยุดไหม
+	r.POST("/register", Register.Register)
+	r.POST("/login", login.Login)
+
+	protected := r.Group("/users", auth.Protect([]byte(os.Getenv("SIGN"))))
+	protected.GET("/readall", read.ReadAll)
+	protected.GET("/read/:id",read.ReadId)
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT) //ตัวรับสัญญานว่ามีการสั่งหยุดไหม
 	defer stop()
 
 	serverInstant := &http.Server{
-		Addr:	":" + os.Getenv("PORT"),
-		Handler:	r,
-		ReadTimeout:	10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		Addr:           ":" + os.Getenv("PORT"),
+		Handler:        r,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
 	go func() {
-		if err:= serverInstant.ListenAndServe(); err!= nil && err!= http.ErrServerClosed {
+		if err := serverInstant.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Listen: %s\n", err)
 		}
 	}()
 	<-ctx.Done()
-	stop() 
+	stop()
 	fmt.Println("Shutting down gracefully, press Ctrl + c again to force")
 
-	timeoutCtx,cancel := context.WithTimeout(context.Background(),5 * time.Second)
+	timeoutCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if err:= serverInstant.Shutdown(timeoutCtx); err != nil {
+	if err := serverInstant.Shutdown(timeoutCtx); err != nil {
 		fmt.Println(err)
 	}
 }

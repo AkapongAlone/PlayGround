@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"friendDive/auth"
-	"friendDive/register"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	db "friendDive/orm"
 )
 
 type LoginBody struct {
@@ -19,15 +19,7 @@ type LoginBody struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type LoginDbHandler struct {
-	db	*gorm.DB
-}
-
-func NewLoginHandler(db *gorm.DB) *LoginDbHandler{
-	return &LoginDbHandler{db}  
-}
-
-func (db *LoginDbHandler)Login (c *gin.Context){
+func Login (c *gin.Context){
 	var login LoginBody
 	if err := c.ShouldBindJSON(&login); err != nil {
 		c.JSON(http.StatusBadRequest,gin.H{
@@ -36,8 +28,8 @@ func (db *LoginDbHandler)Login (c *gin.Context){
 		return
 	}
 
-	var HaveUser register.RegisterBody
-	db.db.Where("username = ?", login.Username).First(&HaveUser)
+	var HaveUser db.UserBody
+	db.Db.Where("username = ?", login.Username).First(&HaveUser)
 	if HaveUser.ID == 0 {
 		c.JSON(http.StatusBadRequest,gin.H{
 			"error":"user not Exists",
