@@ -16,9 +16,3 @@ func GenToken(signature string) (string,error){
 		}
 	return sign, nil
 	}
-
-	
-
-	
-	
-

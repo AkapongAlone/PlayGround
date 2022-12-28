@@ -11,6 +11,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	db "friendDive/orm"
+	"github.com/gin-contrib/sessions"
 )
 
 type LoginBody struct {
@@ -44,16 +45,44 @@ func Login (c *gin.Context){
 			log.Panicln("consider env var")
 		}
 		token,_ := auth.GenToken(os.Getenv("SIGN"))
-		c.Request.Header.Add("Authorization", token)
-		c.Header("Authorization",token)
+		HaveUser.Token = token
+		db.Db.Save(&HaveUser)
 		c.JSON(http.StatusOK, gin.H{
 			"status":"Success",
+			"token":token,
 		})
+		session := sessions.Default(c)
+		session.Set("user", login.Username)
+		session.Save()
+		// Set the JWT as a cookie
+		c.SetCookie("jwt", token, 3600, "", "", false, true)
 
+		// Redirect the user to the protected page
+		c.Redirect(http.StatusFound, "/users")
+		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"status":"error check username or password",
 		})
+		return
 	}
-	return
+	
 }
+
+func refreshToken(User string) {
+	var user db.UserBody
+	db.Db.Where("username = ?", User).First(&user)
+	NewToken,_ := auth.GenToken(os.Getenv("SIGN"))
+	user.Token = NewToken
+	db.Db.Save(&user)
+}
+
+func IsLogin(User string)bool {
+	var user db.UserBody
+	db.Db.Where("username = ?", User).First(&user)
+	if user.Token == "" {
+		return false
+	}
+	return true
+}
+

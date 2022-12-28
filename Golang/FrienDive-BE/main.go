@@ -28,6 +28,7 @@ func main() {
 	}
 
 	db.InitDB()
+	
 	r := gin.Default()
 	r.GET("/healthz", func(ctx *gin.Context) {
 		ctx.Status(200)
