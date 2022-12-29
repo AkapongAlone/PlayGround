@@ -1,4 +1,4 @@
-package drivesite
+package divesite
 
 import (
 	
@@ -11,11 +11,11 @@ import (
 
 
 
-// func CreateDriveSite
+// func Createdivesite
 
 func GetAllDiveSite(c *gin.Context) {
 	
-	var AllDS []db.DriveSiteBody
+	var AllDS []db.DiveSiteBody
 	db.Db.Find(&AllDS)
 	c.JSON(http.StatusOK, gin.H{
 		"data": AllDS,

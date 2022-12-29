@@ -2,7 +2,8 @@ package orm
 
 import (
 	"fmt"
-	_"os"
+	_ "os"
+
 	// "gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -17,11 +18,11 @@ type UserBody struct {
 	Password string `json:"password" binding:"required"`
 	Fullname string `json:"fullname" `
 	Avatar   string `json:"avatar" `
-	Skill	string	`json:"skill"`
-	Token	string	`json:"token"`
+	Skill    string `json:"skill"`
+	Token    string `json:"token"`
 }
 
-type DriveSiteBody struct {
+type DiveSiteBody struct {
 	gorm.Model
 	Name       string `json:"name" binding:"required"`
 	DivingType string `json:"diveType" binding:"required"`
@@ -31,7 +32,7 @@ type DriveSiteBody struct {
 	Rate       int    `json:"username" `
 	LocationBody
 	DiveSiteDetail
-	PhotoAlbums []string `json:"photos" `
+	PhotoAlbums []string `gorm:"type:text[]" json:"photos" `
 }
 
 type LocationBody struct {
@@ -44,7 +45,7 @@ type LocationBody struct {
 type DiveSiteDetail struct {
 	Introduction string
 	Overview
-	Highlights
+	Highlights  []string  `gorm:"type:text[]" json:"highlights" `
 }
 
 type Check int
@@ -52,7 +53,7 @@ type Check int
 type Overview struct {
 	MaxDeep     int
 	AverageDeep int
-	DriveType   []int
+	// DriveType   []int
 }
 
 const (
@@ -85,25 +86,22 @@ func (s Check) String() string {
 	return "unknown"
 }
 
-type Highlights struct {
-	Highlight []string
-}
+
 
 type ReportBody struct {
 	Reason        string
 	SpecifyReason string
 }
 
-
 func InitDB() {
-	
+
 	// dsn := os.Getenv("DB_CONN")
 	Db, err = gorm.Open(sqlite.Open("testDB"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 	Db.AutoMigrate(&UserBody{})
-	Db.AutoMigrate(&DriveSiteBody{})
-	fmt.Println("Db connect",)
-	
+	Db.AutoMigrate(&DiveSiteBody{})
+	fmt.Println("Db connect")
+
 }

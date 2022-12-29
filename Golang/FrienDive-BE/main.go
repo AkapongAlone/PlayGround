@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"friendDive/auth"
 	"friendDive/login"
-	"friendDive/read"
 	Register "friendDive/register"
 	"log"
 	"net/http"
@@ -14,6 +13,7 @@ import (
 	"syscall"
 	"time"
 
+	ds "friendDive/divesite"
 	db "friendDive/orm"
 
 	"github.com/gin-contrib/cors"
@@ -28,7 +28,7 @@ func main() {
 	}
 
 	db.InitDB()
-	
+
 	r := gin.Default()
 	r.GET("/healthz", func(ctx *gin.Context) {
 		ctx.Status(200)
@@ -40,10 +40,16 @@ func main() {
 
 	r.POST("/register", Register.Register)
 	r.POST("/login", login.Login)
+	r.POST("/logout", login.Logout)
 
-	protected := r.Group("/users", auth.Protect([]byte(os.Getenv("SIGN"))))
-	protected.GET("/readall", read.ReadAll)
-	protected.GET("/read/:id",read.ReadId)
+	protected := r.Group("/dive-site", auth.Protect([]byte(os.Getenv("SIGN")))) 
+	{
+		protected.GET("/", ds.GetAllDiveSite)
+		protected.GET("/:id", ds.GetSite)
+		protected.GET("/edit/:id", ds.EditSite)
+		protected.POST("/create", ds.CreateSite)
+	}
+	
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT) //ตัวรับสัญญานว่ามีการสั่งหยุดไหม
 	defer stop()
 

@@ -1,4 +1,4 @@
-package drivesite
+package divesite
 
 import (
 	"net/http"
@@ -6,21 +6,19 @@ import (
 	db "friendDive/orm"
 
 	"github.com/gin-gonic/gin"
-	
 )
 
-func Register(c *gin.Context) { // func Handler ให้ฟังชั่นนี้เป็น method ของ type RegisterHandler ที่จัดการ DB โดยค่าที่รับมาก็อยู่ใน context เพื่อที่จะทำทุกอย่างให้จบในฟังชั่นนี้
-	var site db.DriveSiteBody
-	// handler := NewRegisterHandler(db.Db)
+func CreateSite(c *gin.Context) { // func Handler ให้ฟังชั่นนี้เป็น method ของ type RegisterHandler ที่จัดการ DB โดยค่าที่รับมาก็อยู่ใน context เพื่อที่จะทำทุกอย่างให้จบในฟังชั่นนี้
+	var site db.DiveSiteBody
 	if err := c.ShouldBindJSON(&site); err != nil { //check Context is ok?
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	var IsExistName db.DriveSiteBody
+	var IsExistName db.DiveSiteBody
 
-	db.Db.Where("Username = ?", site.Name).First(&IsExistName)
+	db.Db.Where("Name = ?", site.Name).First(&IsExistName)
 	if IsExistName.ID > 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "name Already Exists",
@@ -28,7 +26,8 @@ func Register(c *gin.Context) { // func Handler ให้ฟังชั่น�
 		return
 	}
 
-	
+	BeforeSave(&site)
+
 	createTable := db.Db.Create(&site)        //Input Data to DB
 	if err := createTable.Error; err != nil { //Check if error
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -40,4 +39,11 @@ func Register(c *gin.Context) { // func Handler ให้ฟังชั่น�
 		"ID":   site.Model.ID,
 		"User": site,
 	})
+}
+
+func BeforeSave(d *db.DiveSiteBody) {
+	if len(d.PhotoAlbums) == 0 {
+		d.PhotoAlbums = []string{"default"}
+	}
+	return
 }

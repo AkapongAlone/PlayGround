@@ -69,13 +69,7 @@ func Login (c *gin.Context){
 	
 }
 
-func refreshToken(User string) {
-	var user db.UserBody
-	db.Db.Where("username = ?", User).First(&user)
-	NewToken,_ := auth.GenToken(os.Getenv("SIGN"))
-	user.Token = NewToken
-	db.Db.Save(&user)
-}
+
 
 func IsLogin(User string)bool {
 	var user db.UserBody
