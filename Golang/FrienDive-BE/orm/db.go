@@ -3,7 +3,7 @@ package orm
 import (
 	"fmt"
 	_ "os"
-
+	
 	// "gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -25,14 +25,13 @@ type UserBody struct {
 type DiveSiteBody struct {
 	gorm.Model
 	Name       string `json:"name" binding:"required"`
-	DivingType string `json:"diveType" binding:"required"`
+	DivingType string `json:"divingtype" binding:"required"`
 	Level      string `json:"level" binding:"required"`
-	CreateAt   string `json:"created" binding:"required"`
-	LastUpdate string `json:"latest" `
-	Rate       int    `json:"username" `
+	Rate       int    `json:"rate" `
 	LocationBody
 	DiveSiteDetail
-	PhotoAlbums []string `gorm:"type:text[]" json:"photos" `
+	PhotoAlbumsIn []string `gorm:"type:text[]" json:"photos" `
+	PhotoAlbumsOut	string
 }
 
 type LocationBody struct {
@@ -45,47 +44,18 @@ type LocationBody struct {
 type DiveSiteDetail struct {
 	Introduction string
 	Overview
-	Highlights  []string  `gorm:"type:text[]" json:"highlights" `
+	HighlightsIn  []string  `gorm:"type:text[]" json:"highlights" `
+	HighlightsOut	string
 }
 
-type Check int
+
 
 type Overview struct {
 	MaxDeep     int
 	AverageDeep int
-	// DriveType   []int
+	DiveTypeIn   []string  `gorm:"type:text[]" json:"divetype" `
+	DiveTypeOut	string
 }
-
-const (
-	ScubaDivingOpenWater Check = iota
-	ScubaDivingAdvance
-	TechnicalDiving
-	FreedivingBasic
-	FreedivingAdvance
-	Snorkeling
-	Skindiving
-)
-
-func (s Check) String() string {
-	switch s {
-	case ScubaDivingOpenWater:
-		return "ScubaDivingOpenWater"
-	case ScubaDivingAdvance:
-		return "ScubaDivingAdvance"
-	case TechnicalDiving:
-		return "TechnicalDiving"
-	case FreedivingBasic:
-		return "FreedivingBasic"
-	case FreedivingAdvance:
-		return "FreedivingAdvance"
-	case Snorkeling:
-		return "Snorkeling"
-	case Skindiving:
-		return "Skindiving"
-	}
-	return "unknown"
-}
-
 
 
 type ReportBody struct {

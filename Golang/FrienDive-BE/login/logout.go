@@ -10,9 +10,7 @@ import (
 )
 
 func Logout(c *gin.Context) {
-	// Clear the session data
-	// session := sessions.Default(c)
-	// CurUser := session.Get("user")
+	
 	var login LoginBody
 	if err := c.ShouldBindJSON(&login); err != nil {
 		c.JSON(http.StatusBadRequest,gin.H{
@@ -27,9 +25,5 @@ func Logout(c *gin.Context) {
 	
 	HaveUser.Token = ""
 	db.Db.Save(&HaveUser)
-	// session.Clear()
-	// session.Save()
-
-	// Redirect the user to the login page
-	// c.Redirect(http.StatusFound, "/login")
+	
 }

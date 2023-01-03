@@ -35,7 +35,7 @@ func main() {
 	})
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://google.com"}
+	config.AllowOrigins = []string{"*",}
 	r.Use(cors.New(config))
 
 	r.POST("/register", Register.Register)
@@ -46,7 +46,7 @@ func main() {
 	{
 		protected.GET("/", ds.GetAllDiveSite)
 		protected.GET("/:id", ds.GetSite)
-		protected.GET("/edit/:id", ds.EditSite)
+		protected.PUT("/edit/:id", ds.EditSite)
 		protected.POST("/create", ds.CreateSite)
 	}
 	

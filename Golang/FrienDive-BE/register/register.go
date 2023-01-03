@@ -11,7 +11,6 @@ import (
 
 func Register(c *gin.Context) { // func Handler ให้ฟังชั่นนี้เป็น method ของ type RegisterHandler ที่จัดการ DB โดยค่าที่รับมาก็อยู่ใน context เพื่อที่จะทำทุกอย่างให้จบในฟังชั่นนี้
 	var user db.UserBody
-	// handler := NewRegisterHandler(db.Db)
 	if err := c.ShouldBindJSON(&user); err != nil { //check Context is ok?
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),

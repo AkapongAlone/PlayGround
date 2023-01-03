@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	
 )
 
 func EditSite(c *gin.Context) {
@@ -19,7 +20,7 @@ func EditSite(c *gin.Context) {
 
 	var beforeEdit db.DiveSiteBody
 	db.Db.Where("id = ?", id).First(&beforeEdit)
-
+	TypeToCombine(&Site)
 	db.Db.Model(&beforeEdit).Updates(Site)
 	c.JSON(http.StatusOK, gin.H{
 		"data": Site,

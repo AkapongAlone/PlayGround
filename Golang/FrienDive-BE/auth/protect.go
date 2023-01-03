@@ -25,7 +25,7 @@ func Protect(signature []byte) gin.HandlerFunc {
 			return
 
 		}
-		refreshToken(&tokenString)
+		// refreshToken(&tokenString)
 		_, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("Unexpected signing")

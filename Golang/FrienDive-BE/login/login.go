@@ -6,12 +6,12 @@ import (
 	"os"
 
 	"friendDive/auth"
+	db "friendDive/orm"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	db "friendDive/orm"
-	"github.com/gin-contrib/sessions"
 )
 
 type LoginBody struct {
@@ -20,11 +20,11 @@ type LoginBody struct {
 	Password string `json:"password" binding:"required"`
 }
 
-func Login (c *gin.Context){
+func Login(c *gin.Context) {
 	var login LoginBody
 	if err := c.ShouldBindJSON(&login); err != nil {
-		c.JSON(http.StatusBadRequest,gin.H{
-			"error":err.Error(),
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
 		})
 		return
 	}
@@ -32,28 +32,26 @@ func Login (c *gin.Context){
 	var HaveUser db.UserBody
 	db.Db.Where("username = ?", login.Username).First(&HaveUser)
 	if HaveUser.ID == 0 {
-		c.JSON(http.StatusBadRequest,gin.H{
-			"error":"user not Exists",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "user not Exists",
 		})
 		return
 	}
-	err := bcrypt.CompareHashAndPassword([]byte(HaveUser.Password),[]byte(login.Password))
+	err := bcrypt.CompareHashAndPassword([]byte(HaveUser.Password), []byte(login.Password))
 	if err == nil {
 
 		err := godotenv.Load("local.env")
 		if err != nil {
 			log.Panicln("consider env var")
 		}
-		token,_ := auth.GenToken(os.Getenv("SIGN"))
+		token, _ := auth.GenToken(os.Getenv("SIGN"))
 		HaveUser.Token = token
 		db.Db.Save(&HaveUser)
 		c.JSON(http.StatusOK, gin.H{
-			"status":"Success",
-			"token":token,
+			"status": "Success",
+			"token":  token,
 		})
-		session := sessions.Default(c)
-		session.Set("user", login.Username)
-		session.Save()
+
 		// Set the JWT as a cookie
 		c.SetCookie("jwt", token, 3600, "", "", false, true)
 
@@ -62,16 +60,14 @@ func Login (c *gin.Context){
 		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"status":"error check username or password",
+			"status": "error check username or password",
 		})
 		return
 	}
-	
+
 }
 
-
-
-func IsLogin(User string)bool {
+func IsLogin(User string) bool {
 	var user db.UserBody
 	db.Db.Where("username = ?", User).First(&user)
 	if user.Token == "" {
@@ -79,4 +75,3 @@ func IsLogin(User string)bool {
 	}
 	return true
 }
-
