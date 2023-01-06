@@ -41,11 +41,11 @@ func main() {
 	r.POST("/register", Register.Register)
 	r.POST("/login", login.Login)
 	r.POST("/logout", login.Logout)
+	r.GET("/dive-site", ds.GetAllDiveSite)
+	r.GET("/dive-site/:id", ds.GetSite)
 
 	protected := r.Group("/dive-site", auth.Protect([]byte(os.Getenv("SIGN")))) 
 	{
-		protected.GET("/", ds.GetAllDiveSite)
-		protected.GET("/:id", ds.GetSite)
 		protected.PUT("/edit/:id", ds.EditSite)
 		protected.POST("/create", ds.CreateSite)
 	}
