@@ -2,10 +2,10 @@ package orm
 
 import (
 	"fmt"
-	_ "os"
+	"os"
 	
-	// "gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
+	_"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -65,8 +65,8 @@ type ReportBody struct {
 
 func InitDB() {
 
-	// dsn := os.Getenv("DB_CONN")
-	Db, err = gorm.Open(sqlite.Open("testDB"), &gorm.Config{})
+	dsn := os.Getenv("DB_CONN")
+	Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
